@@ -1,9 +1,15 @@
+import logging
 import socket
 
 """
 Cliente TCP que envia uma mensagem ao servidor e exibe a resposta
 Discentes: Arthur Abreu, Enzo Veloso, Josiney Junior
 """
+logging.basicConfig(
+    filename='server_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 def main():
     host = '127.0.0.1'
@@ -14,7 +20,7 @@ def main():
         message = input("Digite a mensagem para enviar ao servidor: ").strip()
         if message:
             break
-        print("A mensagem não pode ser vazia. Tente novamente")
+        logging.info("A mensagem não pode ser vazia. Tente novamente")
 
     try:
         # Cria o socket e estabelece a conexão
@@ -24,11 +30,11 @@ def main():
             client_socket.send(message.encode())
             # Recebe a resposta
             response = client_socket.recv(1024).decode()
-            print(f"Resposta do servidor: {response}")
+            logging.info(f"Resposta do servidor: {response}")
     except ConnectionRefusedError:
-        print("Não foi possível conectar ao servidor. Verifique se o servidor está ativo")
+        logging.info("Não foi possível conectar ao servidor. Verifique se o servidor está ativo")
     except Exception as e:
-        print(f"Erro na comunicação com o servidor: {e}")
+        logging.info(f"Erro na comunicação com o servidor: {e}")
 
 if __name__ == "__main__":
     main()

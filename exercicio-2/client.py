@@ -1,9 +1,16 @@
+import logging
 import socket
 
 """
 Cliente UDP que envia mensagens para o servidor e exibe o eco
 Discentes: Arthur Abreu, Enzo Veloso, Josiney Junior
 """
+
+logging.basicConfig(
+    filename='server_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 def main():
     host = '127.0.0.1'  
@@ -23,7 +30,7 @@ def main():
             # Valida o tamanho da mensagem
             msg_bytes = msg.encode()
             if len(msg_bytes) > max_size:
-                print(f"Erro: Mensagem excede {max_size} bytes")
+                logging.info(f"Erro: Mensagem excede {max_size} bytes")
                 continue
 
             try:
@@ -31,11 +38,11 @@ def main():
                 client_socket.sendto(msg_bytes, (host, port))
                 # Recebe a resposta do servidor
                 data, server = client_socket.recvfrom(max_size)
-                print(f"Eco recebido: {data.decode()}")
+                logging.info(f"Eco recebido: {data.decode()}")
             except socket.timeout:
-                print("Erro: Tempo excedido. Possível perda de pacote")
+                logging.info("Erro: Tempo excedido. Possível perda de pacote")
             except Exception as e:
-                print(f"Erro na comunicação: {e}")
+                logging.info(f"Erro na comunicação: {e}")
     finally:
         client_socket.close()
 

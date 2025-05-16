@@ -1,35 +1,41 @@
 import socket
 import threading
+import logging
 
 """
 Servidor TCP que aceita múltiplas conexões de clientes e responde com confirmação
 Discentes: Arthur Abreu, Enzo Veloso, Josiney Junior
 """
+logging.basicConfig(
+    filename='server_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 def handle_client(client_socket, addr):
     """
     Lida com a comunicação de um cliente conectado
     """
     try:
-        print(f"Conexão estabelecida com {addr}")
+        logging.info(f"Conexão estabelecida com {addr}")
         # Recebe dados do cliente
         data = client_socket.recv(1024).decode()
         
         # Valida se a mensagem não está vazia
         if not data.strip():
-            print(f"Cliente {addr} enviou uma mensagem vazia")
+            logging.info(f"Cliente {addr} enviou uma mensagem vazia")
             response = "Erro: Mensagem não pode ser vazia"
         else:
-            print(f"Recebido de {addr}: {data}")
+            logging.info(f"Recebido de {addr}: {data}")
             response = "Mensagem recebida"
         
         # Envia resposta e fecha a conexão
         client_socket.send(response.encode())
     except Exception as e:
-        print(f"Erro ao lidar com cliente {addr}: {e}")
+        logging.info(f"Erro ao lidar com cliente {addr}: {e}")
     finally:
         client_socket.close()
-        print(f"Conexão com {addr} fechada")
+        logging.info(f"Conexão com {addr} fechada")
 
 def main():
     host = '127.0.0.1'
@@ -39,7 +45,7 @@ def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
     server_socket.listen(5)
-    print(f"Servidor ouvindo na porta {port}...")
+    logging.info(f"Servidor ouvindo na porta {port}...")
 
     try:
         while True:
@@ -49,7 +55,7 @@ def main():
             client_thread = threading.Thread(target=handle_client, args=(client_socket, addr))
             client_thread.start()
     except KeyboardInterrupt:
-        print("\nServidor encerrando...")
+        logging.info("\nServidor encerrando...")
     finally:
         server_socket.close()
 

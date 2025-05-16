@@ -1,9 +1,16 @@
+import logging
 import socket
 
 """
 Cliente TCP que se conecta a um servidor de hora e solicita a hora atual.
 Discentes: Arthur Abreu, Enzo Veloso, Josiney Junior
 """
+
+logging.basicConfig(
+    filename='server_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 HOST = '127.0.0.1'  # IP do servidor
 PORT = 7000         # Porta usada pelo servidor
@@ -22,9 +29,9 @@ def client_request_time():
 
             # Recebe e exibe a hora retornada pelo servidor
             response = client.recv(1024).decode()
-            print(f"[CLIENTE] Hora recebida do servidor: {response}")
+            logging.info(f"[CLIENTE] Hora recebida do servidor: {response}")
     except Exception as e:
-        print(f"[CLIENTE ERRO] Falha ao conectar ao servidor: {e}")
+        logging.info(f"[CLIENTE ERRO] Falha ao conectar ao servidor: {e}")
 
 
 client_request_time()

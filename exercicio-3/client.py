@@ -1,3 +1,4 @@
+import logging
 import socket
 import threading
 
@@ -6,6 +7,11 @@ Cliente de chat TCP que permite envio e recebimento de mensagens simultâneas
 Discentes: Arthur Abreu, Enzo Veloso, Josiney Junior
 """
 
+logging.basicConfig(
+    filename='server_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 def receive_messages(sock):
     try:
@@ -13,12 +19,12 @@ def receive_messages(sock):
             data = sock.recv(1024)
             if not data:
                 break
-            print(
+            logging.info(
                 f"\nMensagem recebida: {data.decode()}\nDigite sua mensagem: ", end='')
     except Exception as e:
-        print(f"\nErro ao receber mensagens: {e}")
+        logging.info(f"\nErro ao receber mensagens: {e}")
     except KeyboardInterrupt:
-        print("\nCliente encerrando...")
+        logging.info("\nCliente encerrando...")
     finally:
         sock.close()
 
@@ -32,9 +38,9 @@ def send_messages(sock):
                 break
             sock.send(message.encode())
     except Exception as e:
-        print(f"Erro ao enviar mensagem: {e}")
+        logging.info(f"Erro ao enviar mensagem: {e}")
     except KeyboardInterrupt:
-        print("\nCliente encerrando...")
+        logging.info("\nCliente encerrando...")
     finally:
         sock.close()
 
@@ -47,7 +53,7 @@ def main():
     try:
         sock.connect((host, port))
     except Exception as e:
-        print(f"Não foi possível conectar ao servidor: {e}")
+        logging.info(f"Não foi possível conectar ao servidor: {e}")
         return
 
     try:
@@ -62,7 +68,7 @@ def main():
         receive_thread.join()
         send_thread.join()
     except KeyboardInterrupt:
-        print("\nEncerrando conexão...")
+        logging.info("\nEncerrando conexão...")
     finally:
         receive_messages
 

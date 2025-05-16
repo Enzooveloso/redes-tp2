@@ -33,6 +33,38 @@ sudo apt-get update
 sudo apt-get install python3.10
 ```
 
+## 🐍 **Utilizando Ambiente Virtual (venv)**
+
+Para garantir que todas as dependências do projeto sejam instaladas corretamente e evitar conflitos com outras bibliotecas Python do sistema, recomenda-se o uso de um ambiente virtual.
+
+### 🔧 **Passos para criar e ativar o ambiente virtual**
+
+1. **Crie o ambiente virtual na raiz do projeto:**
+
+   ```bash
+   python3 -m venv venv
+   ```
+
+2. **Ative o ambiente virtual:**
+
+   * No **Linux/macOS**:
+
+     ```bash
+     source venv/bin/activate
+     ```
+
+3. **Instale as dependências do projeto:**
+
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+4. **(Opcional) Desative o ambiente virtual após o uso:**
+
+   ```bash
+   deactivate
+   ```
+
 ## 👥 **Integrantes do Grupo**
 - Arthur Abreu
 - Enzo Veloso

@@ -1,10 +1,18 @@
 import socket
 import threading
+import logging
 
 """
 Servidor de chat TCP que conecta dois clientes e encaminha mensagens entre eles
 Discentes: Arthur Abreu, Enzo Veloso, Josiney Junior
 """
+
+logging.basicConfig(
+    filename='server_chat_log.txt',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
 
 def handle_client(receiver, sender):
     """
@@ -20,11 +28,11 @@ def handle_client(receiver, sender):
                 break
             sender.send(data)
     except Exception as e:
-        print(f"Erro: {e}")
+        logging.info(f"Erro: {e}")
     finally:
         receiver.close()
         sender.close()
-        print("Conexões encerradas")
+        logging.info("Conexões encerradas")
 
 def main():
     host = '127.0.0.1'
@@ -33,16 +41,16 @@ def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
     server_socket.listen(2)  # Aceita até duas conexões
-    print(f"Servidor de chat ouvindo na porta {port}...")
+    logging.info(f"Servidor de chat ouvindo na porta {port}...")
 
     try:
       # Aceita o primeiro cliente
       client1, addr1 = server_socket.accept()
-      print(f"Cliente 1 conectado: {addr1}")
+      logging.info(f"Cliente 1 conectado: {addr1}")
 
       # Aceita o segundo cliente
       client2, addr2 = server_socket.accept()
-      print(f"Cliente 2 conectado: {addr2}")
+      logging.info(f"Cliente 2 conectado: {addr2}")
 
       # Inicia as threads para encaminhamento
       thread1 = threading.Thread(target=handle_client, args=(client1, client2))
@@ -54,10 +62,10 @@ def main():
       thread1.join()
       thread2.join()
     except KeyboardInterrupt:
-        print("\nServidor encerrando...")
+        logging.info("\nServidor encerrando...")
     finally:
       server_socket.close()
-      print("Servidor encerrado")
+      logging.info("Servidor encerrado")
 
 if __name__ == "__main__":
     main()
